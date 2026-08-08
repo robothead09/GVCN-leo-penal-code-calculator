@@ -300,6 +300,14 @@ body {
   color: var(--felony);
 }
 
+/* Fix: [hidden] must win over .totals-row's own display:flex, or the
+   browser's default hidden-attribute behavior gets silently overridden
+   and rows with the `hidden` attribute stay visible regardless of what
+   the JS sets. */
+.totals-row[hidden] {
+  display: none;
+}
+
 
 /* ---------------- copy button ---------------- */
 

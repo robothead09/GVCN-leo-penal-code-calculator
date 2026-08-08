@@ -12,6 +12,7 @@ const totalCharges = document.getElementById("totalCharges");
 const totalJail = document.getElementById("totalJail");
 const totalFine = document.getElementById("totalFine");
 const totalImpound = document.getElementById("totalImpound");
+const totalImpoundValue = document.getElementById("totalImpoundValue");
 
 const clearBtn = document.getElementById("clearBtn");
 const calcBtn = document.getElementById("calcBtn");
@@ -80,6 +81,28 @@ function formatSeconds(total) {
   return m
     ? `${m}m ${s}s`
     : `${s}s`;
+}
+
+
+// builds "(x)xx - Name x2, (x)xx - Name" text, collapsing duplicates
+function buildChargeText() {
+
+  return groupCart()
+    .map(({ code, count }) => {
+
+      const c =
+        byCode[code];
+
+      const label =
+        `${formatCode(c.code)} - ${c.name}`;
+
+      return count > 1
+        ? `${label} x${count}`
+        : label;
+
+    })
+    .join(", ");
+
 }
 
 
@@ -220,7 +243,7 @@ function renderSuggestions(query) {
         </div>
 
         <div class="suggest-sub">
-          ${c.code} &middot; ${penaltyLine(c)}
+          ${formatCode(c.code)} &middot; ${penaltyLine(c)}
         </div>
 
       </div>
@@ -408,13 +431,43 @@ function addCharge(code) {
 }
 
 
-function removeCharge(index) {
+function removeCharge(code) {
 
-  cart.splice(index, 1);
+  const idx = cart.indexOf(code);
+
+  if (idx !== -1) {
+    cart.splice(idx, 1);
+  }
 
   renderList();
 
   hideTotals();
+
+}
+
+
+// collapses the cart into one entry per unique code, with a count,
+// preserving the order each code first appeared in
+function groupCart() {
+
+  const order = [];
+  const counts = {};
+
+  cart.forEach(code => {
+
+    if (!(code in counts)) {
+      counts[code] = 0;
+      order.push(code);
+    }
+
+    counts[code]++;
+
+  });
+
+  return order.map(code => ({
+    code,
+    count: counts[code]
+  }));
 
 }
 
@@ -424,7 +477,7 @@ function renderList() {
   chargeList.innerHTML = "";
 
 
-  cart.forEach((code, i) => {
+  groupCart().forEach(({ code, count }) => {
 
     const c =
       byCode[code];
@@ -445,11 +498,11 @@ function renderList() {
       <div class="charge-item-main">
 
         <div class="charge-item-name">
-          ${c.name}
+          ${c.name}${count > 1 ? ` &times;${count}` : ""}
         </div>
 
         <div class="charge-item-sub">
-          ${c.code} &middot; ${penaltyLine(c)}
+          ${formatCode(c.code)} &middot; ${penaltyLine(c)}
         </div>
 
       </div>
@@ -457,7 +510,7 @@ function renderList() {
       <button
         type="button"
         class="charge-item-remove"
-        aria-label="Remove ${c.name}"
+        aria-label="Remove one ${c.name}"
       >
         &times;
       </button>
@@ -468,7 +521,7 @@ function renderList() {
       .querySelector(".charge-item-remove")
       .addEventListener(
         "click",
-        () => removeCharge(i)
+        () => removeCharge(code)
       );
 
 
@@ -550,16 +603,7 @@ calcBtn.addEventListener(
 
 
     const chargeText =
-      cart
-        .map(code => {
-
-          const c =
-            byCode[code];
-
-          return `${formatCode(c.code)} - ${c.name}`;
-
-        })
-        .join(", ");
+      buildChargeText();
 
 
     totalCharges.textContent =
@@ -571,8 +615,15 @@ calcBtn.addEventListener(
     totalFine.textContent =
       "$" + fine.toLocaleString();
 
-    totalImpound.hidden =
-      !impound;
+    totalImpoundValue.textContent =
+      impound
+        ? "Required"
+        : "Not Required";
+
+    totalImpound.classList.toggle(
+      "totals-row--flag",
+      impound
+    );
 
     totals.hidden =
       false;
@@ -616,16 +667,7 @@ copyBtn.addEventListener(
 
 
     const chargeText =
-      cart
-        .map(code => {
-
-          const c =
-            byCode[code];
-
-          return `${formatCode(c.code)} - ${c.name}`;
-
-        })
-        .join(", ");
+      buildChargeText();
 
 
     let report =
