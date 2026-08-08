@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GVCN Penal Code Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<main class="wrap">
+
+  <p class="eyebrow">LEO Penal Code Calculator by Robothead09</p>
+
+  <div class="search-block">
+    <div class="search-shell">
+      <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input
+        id="searchInput"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Start calculating..."
+        aria-label="Search penal codes"
+        aria-expanded="false"
+        aria-controls="suggestList"
+        role="combobox"
+      />
+    </div>
+    <ul id="suggestList" class="suggest-list" role="listbox" hidden></ul>
+  </div>
+
+  <ol id="chargeList" class="charge-list"></ol>
+
+  <div class="totals" id="totals" hidden>
+    <div class="totals-row">
+      <span>Jail Time</span>
+      <strong id="totalJail">0s</strong>
+    </div>
+    <div class="totals-row">
+      <span>Fine</span>
+      <strong id="totalFine">$0</strong>
+    </div>
+    <div class="totals-row totals-row--flag" id="totalImpound" hidden>
+      <span>Impoundment</span>
+      <strong>Required</strong>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="clearBtn" type="button" class="btn-ghost" hidden>Clear</button>
+    <button id="calcBtn" type="button" class="btn-primary" hidden>Calculate</button>
+  </div>
+
+</main>
+</main>
+
+<p class="footer-note">Made by Robothead09 for the exclusive use of Greenville Community News Public Services. This is for in-game use only and should not be applied to real life situations.</p>
+
+<script src="data.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

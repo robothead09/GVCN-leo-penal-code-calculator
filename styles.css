@@ -1,0 +1,299 @@
+:root {
+  --bg: rgb(0, 10, 124);
+  --surface: #ffffff;
+  --border: #e6e3dc;
+  --text: #1c1c1a;
+  --text-dim: rgb(0, 0, 0);
+  --text-mute: #9b988f;
+  --felony: #ff0000;
+  --misd: #ffb700;
+  --cite: #000dff;
+  --shadow: 0 1px 2px rgba(20,18,14,0.04), 0 10px 30px rgba(20,18,14,0.06);
+  --font-display: 'Roboto', system-ui, sans-serif;
+  --font-body: '', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  display: flex;
+  justify-content: center;
+  padding: 12vh 20px 60px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cite);
+  outline-offset: 2px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 640px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: none;
+  color: var(--text-mute);
+}
+
+/* ---------------- search ---------------- */
+.search-block {
+  position: relative;
+}
+
+.search-shell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s ease;
+}
+
+.search-shell:focus-within {
+  border-color: var(--cite);
+}
+
+.search-icon { color: var(--text-mute); flex-shrink: 0; }
+
+#searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+#searchInput::placeholder { color: var(--text-mute); font-weight: 500; }
+
+.suggest-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.suggest-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  border-left: 4px solid var(--section-color, var(--border));
+}
+
+.suggest-item + .suggest-item { margin-top: 2px; }
+
+.suggest-item:hover,
+.suggest-item.is-active {
+  background: #f4f2ed;
+}
+
+.suggest-main { flex: 1; min-width: 0; }
+
+.suggest-name {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.suggest-name mark {
+  background: #fbe6a8;
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.suggest-sub {
+  font-size: 11.5px;
+  color: var(--text-mute);
+  margin-top: 2px;
+}
+
+.suggest-cls {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.suggest-cls--felony { background: rgba(209,69,61,0.12); color: var(--felony); }
+.suggest-cls--misdemeanor { background: rgba(201,138,31,0.14); color: var(--misd); }
+.suggest-cls--citation { background: rgba(47,122,184,0.12); color: var(--cite); }
+
+.suggest-empty {
+  padding: 20px 14px;
+  text-align: center;
+  color: var(--text-mute);
+  font-size: 13.5px;
+}
+
+/* ---------------- charge list ---------------- */
+.charge-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.charge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-left: 4px solid var(--section-color, var(--border));
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.charge-item-main { flex: 1; min-width: 0; }
+
+.charge-item-name {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.charge-item-sub {
+  font-size: 11.5px;
+  color: var(--text-mute);
+  margin-top: 2px;
+}
+
+.charge-item-remove {
+  border: none;
+  background: transparent;
+  color: var(--text-mute);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+.charge-item-remove:hover { color: var(--felony); background: rgba(209,69,61,0.08); }
+
+/* ---------------- totals ---------------- */
+.totals {
+  margin-top: 18px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 6px 16px;
+}
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  font-family: var(--font-body);
+}
+
+.totals-row + .totals-row { border-top: 1px solid var(--border); }
+
+.totals-row span {
+  font-size: 12.5px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.totals-row strong {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.totals-row--flag strong { color: var(--felony); }
+
+/* ---------------- actions ---------------- */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn-ghost, .btn-primary {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+}
+
+.btn-ghost {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+
+.btn-ghost:hover { border-color: var(--text-mute); }
+
+.btn-primary {
+  flex: 1;
+  background: var(--text);
+  color: var(--surface);
+}
+
+.btn-primary:hover { background: #34322c; }
+
+/* scrollbar */
+.suggest-list::-webkit-scrollbar { width: 8px; }
+.suggest-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+@media (max-width: 480px) {
+  body { padding: 8vh 16px 40px; }
+  #searchInput { font-size: 17px; }
+}.footer-note {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-mute);
+  pointer-events: none;
+}
