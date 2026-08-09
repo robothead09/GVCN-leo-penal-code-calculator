@@ -3,9 +3,13 @@
 
 const cart = []; // array of charge codes, duplicates allowed
 
+const WARN_AT = 15;
+const MAX_CHARGES = 20;
+
 const searchInput = document.getElementById("searchInput");
 const suggestList = document.getElementById("suggestList");
 const chargeList = document.getElementById("chargeList");
+const limitWarning = document.getElementById("limitWarning");
 
 const totals = document.getElementById("totals");
 const totalCharges = document.getElementById("totalCharges");
@@ -333,6 +337,15 @@ searchInput.addEventListener(
 );
 
 
+// click always fires, even when the input already had focus (e.g. right
+// after selecting a suggestion, since mousedown prevented it from ever
+// blurring) — "focus" alone misses that case and the dropdown stays blank
+searchInput.addEventListener(
+  "click",
+  () => renderSuggestions(searchInput.value)
+);
+
+
 searchInput.addEventListener(
   "keydown",
   (e) => {
@@ -422,11 +435,68 @@ document.addEventListener(
 
 function addCharge(code) {
 
+  if (cart.length >= MAX_CHARGES) {
+    flashLimitWarning();
+    return;
+  }
+
   cart.push(code);
 
   renderList();
 
   hideTotals();
+
+}
+
+
+// briefly pulses the cap message so it's noticeable even if it was
+// already visible (e.g. user keeps clicking charges after hitting 20)
+function flashLimitWarning() {
+
+  updateLimitWarning();
+
+  limitWarning.classList.remove("limit-warning--pulse");
+
+  void limitWarning.offsetWidth; // restart the animation
+
+  limitWarning.classList.add("limit-warning--pulse");
+
+}
+
+
+function updateLimitWarning() {
+
+  const count = cart.length;
+
+  if (count >= MAX_CHARGES) {
+
+    limitWarning.textContent =
+      `Charge limit reached (${count}/${MAX_CHARGES}) — remove a charge to add another.`;
+
+    limitWarning.className =
+      "limit-warning limit-warning--cap";
+
+    limitWarning.hidden = false;
+
+  }
+
+  else if (count >= WARN_AT) {
+
+    limitWarning.textContent =
+      `Approaching the charge limit (${count}/${MAX_CHARGES}).`;
+
+    limitWarning.className =
+      "limit-warning limit-warning--warn";
+
+    limitWarning.hidden = false;
+
+  }
+
+  else {
+
+    limitWarning.hidden = true;
+
+  }
 
 }
 
@@ -539,6 +609,8 @@ function renderList() {
   calcBtn.hidden =
     !has;
 
+  updateLimitWarning();
+
 }
 
 
@@ -617,8 +689,8 @@ calcBtn.addEventListener(
 
     totalImpoundValue.textContent =
       impound
-        ? "Required"
-        : "Not Required";
+        ? "Yes"
+        : "No";
 
     totalImpound.classList.toggle(
       "totals-row--flag",
@@ -670,18 +742,11 @@ copyBtn.addEventListener(
       buildChargeText();
 
 
-    let report =
-      `Charge(s): ${chargeText}\n` +
-      `Total Fine: $${fine.toLocaleString()}\n` +
-      `Jail Time: ${formatSeconds(jail)}`;
-
-
-    if (impound) {
-
-      report +=
-        `\nImpoundment: Required`;
-
-    }
+    const report =
+      `**Charge(s):** ${chargeText}\n` +
+      `*Total Fine:* $${fine.toLocaleString()}\n` +
+      `*Jail Time:* ${formatSeconds(jail)}\n` +
+      `*Impoundment:* ${impound ? "Yes" : "No"}`;
 
 
     try {
