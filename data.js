@@ -10,6 +10,7 @@ const TITLES = [
   "Title 5: Crimes Against Public Peace",
   "Title 6: Traffic Offenses",
   "Title 7: Control of a Deadly Weapon and Equipment",
+  "Title 8: Crimes Against Nature",
 ];
 
 // One accent color per Title, used to color-code search results & the list
@@ -21,10 +22,11 @@ const TITLE_COLORS = [
   "#00ff08", // Title 5 — Public Peace
   "#1500ff", // Title 6 — Traffic
   "#ff00b3", // Title 7 — Weapons
+  "#a0663a", // Title 8 — Nature
 ];
 
 const CHARGES = [
-  // Title 1
+  // Title 1: Crimes Against People
   { code: "1-01", title: 0, name: "Criminal Threats", cls: "misdemeanor", jail: 30, fine: 700 },
   { code: "1-02", title: 0, name: "Assault with a Deadly Weapon", cls: "felony", jail: 120, fine: 1500 },
   { code: "1-03", title: 0, name: "Battery", cls: "misdemeanor", jail: 60, fine: 1000 },
@@ -34,14 +36,14 @@ const CHARGES = [
   { code: "1-07", title: 0, name: "Murder", cls: "felony", jail: 120, fine: 2500 },
   { code: "1-08", title: 0, name: "False Imprisonment", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "1-09", title: 0, name: "Kidnapping", cls: "felony", jail: 150, fine: 6500 },
-  { code: "1-10", title: 0, name: "Domestic Violence", cls: "misdemeanor", jail: 60, fine: 1000 },
-  { code: "1-11", title: 0, name: "Domestic Violence (Physical Traumatic Injury)", cls: "felony", jail: 120, fine: 10000 },
+  { code: "1-10", title: 0, name: "Homicide", cls: "felony", jail: 120, fine: 5000 },
+  { code: "1-11", title: 0, name: "False Imprisonment", cls: "felony", jail: 120, fine: 1500 },
   { code: "1-12", title: 0, name: "Assault on a Public Servant", cls: "felony", jail: 120, fine: 1000 },
   { code: "1-13", title: 0, name: "Attempted Assault on a Public Servant", cls: "felony", jail: 100, fine: 1000 },
   { code: "1-14", title: 0, name: "Attempted Assault", cls: "felony", jail: 100, fine: 1000 },
   { code: "1-15", title: 0, name: "Assault on a Peace Officer", cls: "felony", jail: 180, fine: 2000 },
 
-  // Title 2
+  // Title 2: Crimes Against Property
   { code: "2-01", title: 1, name: "Arson", cls: "felony", jail: 230, fine: 0 },
   { code: "2-02", title: 1, name: "Trespassing", cls: "misdemeanor", jail: 30, fine: 1000 },
   { code: "2-03", title: 1, name: "Trespassing within a Restricted Facility", cls: "felony", jail: 60, fine: 1000 },
@@ -64,18 +66,19 @@ const CHARGES = [
   { code: "2-20", title: 1, name: "Attempted Burglary", cls: "felony", jail: 120, fine: 4000 },
   { code: "2-21", title: 1, name: "Shoplifting", cls: "misdemeanor", jail: 30, fine: 500 },
   { code: "2-22", title: 1, name: "Criminal Tampering", cls: "misdemeanor", jail: 30, fine: 750 },
+  { code: "2-23", title: 1, name: "Insurance Fraud", cls: "felony", jail: 60, fine: 2000 },
 
-  // Title 3
+  // Title 3: Crimes Against Public Decency
   { code: "3-01", title: 2, name: "Lewd or Dissolute Conduct In Public", cls: "misdemeanor", jail: 90, fine: 0 },
   { code: "3-02", title: 2, name: "Stalking", cls: "misdemeanor", jail: 90, fine: 0 },
 
-  // Title 4
+  // Title 4: Crimes Against Criminal Justice
   { code: "4-01", title: 3, name: "Bribery", cls: "felony", jail: 120, fine: 10000 },
   { code: "4-02", title: 3, name: "Dissuading a Victim", cls: "felony", jail: 60, fine: 0 },
   { code: "4-03", title: 3, name: "False Information to a Peace Officer", cls: "misdemeanor", jail: 120, fine: 0 },
   { code: "4-04", title: 3, name: "Filing a False Police Report", cls: "misdemeanor", jail: 60, fine: 0 },
   { code: "4-05", title: 3, name: "Failure to Identify to a Peace Officer", cls: "misdemeanor", jail: 60, fine: 1000 },
-  { code: "4-06", title: 3, name: "Impersonation of a Public Servant", cls: "misdemeanor", jail: 60, fine: 1000 },
+  { code: "4-06", title: 3, name: "Impersonation of a Public Employees", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "4-07", title: 3, name: "Obstruction of a Peace Officer", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "4-08", title: 3, name: "Resisting a Peace Officer", cls: "misdemeanor", jail: 120, fine: 1000 },
   { code: "4-09", title: 3, name: "Escape from Custody", cls: "felony", jail: 210, fine: 1000 },
@@ -92,14 +95,20 @@ const CHARGES = [
   { code: "4-20", title: 3, name: "Perjury", cls: "felony", jail: 90, fine: 2500 },
   { code: "4-21", title: 3, name: "Contempt of Court", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "4-22", title: 3, name: "Escape from Custody (Attempted)", cls: "felony", jail: 120, fine: 5000 },
-  { code: "4-23", title: 3, name: "Unpaid Citation(s)", cls: "misdemeanor", jail: 60, fine: 100 },
+  { code: "4-23", title: 3, name: "Unpaid Citation(s)", cls: "misdemeanor", jail: 60, fine: 400 },
+  { code: "4-24", title: 3, name: "Harboring a Fugitive", cls: "felony", jail: 120, fine: 2000 },
+  { code: "4-25", title: 3, name: "Fleeing an Incident", cls: "misdemeanor", jail: 60, fine: 700 },
+  { code: "4-26", title: 3, name: "False Alarm", cls: "misdemeanor", jail: 60, fine: 300 },
+  { code: "4-27", title: 3, name: "Possession of a Fraudulent ID", cls: "misdemeanor", jail: 30, fine: 900 },
+  { code: "4-28", title: 3, name: "Possession of a Fraudulent Insurance", cls: "citation", jail: 0, fine: 1000 },
 
-  // Title 5
+  // Title 5: Crimes Against Public Peace
   { code: "5-01", title: 4, name: "Disturbing the Peace", cls: "misdemeanor", jail: 0, fine: 500 },
   { code: "5-02", title: 4, name: "Unlawful Assembly", cls: "felony", jail: 90, fine: 0 },
   { code: "5-03", title: 4, name: "Inciting Riot", cls: "felony", jail: 120, fine: 1000 },
+  { code: "5-04", title: 4, name: "Distribution of Food(s) w/o Proper Documents", cls: "misdemeanor", jail: 0, fine: 900 },
 
-  // Title 6
+  // Title 6: Traffic Offenses
   { code: "6-01", title: 5, name: "Invalid/No Vehicle Registration/Insurance", cls: "citation", jail: 0, fine: 200, impound: true },
   { code: "6-02", title: 5, name: "Driving Without a License", cls: "citation", jail: 0, fine: 1000, impound: true },
   { code: "6-03", title: 5, name: "Driving With a Suspended or Revoked License", cls: "misdemeanor", jail: 60, fine: 1000, impound: true },
@@ -135,7 +144,7 @@ const CHARGES = [
   { code: "6-33", title: 5, name: "Impeding Traffic", cls: "citation", jail: 0, fine: 250 },
   { code: "6-34", title: 5, name: "Jaywalking", cls: "citation", jail: 0, fine: 250 },
   { code: "6-35", title: 5, name: "Unnecessary Use of Horn", cls: "citation", jail: 0, fine: 480 },
-  { code: "6-36", title: 5, name: "Excessive Music/Sounds", cls: "citation", jail: 0, fine: 400 },
+  { code: "6-36", title: 5, name: "Excessive Vehicle Sounds", cls: "citation", jail: 0, fine: 400 },
   { code: "6-37", title: 5, name: "Failure to Sign Citation", cls: "misdemeanor", jail: 30, fine: 250, impound: true },
   { code: "6-38", title: 5, name: "Failure to Yield to Pedestrian", cls: "citation", jail: 0, fine: 250 },
   { code: "6-39", title: 5, name: "Distracted Driving", cls: "citation", jail: 0, fine: 1000 },
@@ -162,9 +171,9 @@ const CHARGES = [
   { code: "6-60", title: 5, name: "Obstruction of Traffic", cls: "citation", jail: 0, fine: 350 },
   { code: "6-61", title: 5, name: "Blocking Intersection", cls: "citation", jail: 0, fine: 300 },
   { code: "6-62", title: 5, name: "Improper Turn", cls: "citation", jail: 0, fine: 250 },
-  { code: "6-64", title: 5, name: "Driving Without Due Regard", cls: "citation", jail: 0, fine: 400 },
-  { code: "6-65", title: 5, name: "Operating Unsafe Vehicle", cls: "citation", jail: 0, fine: 500 },
-  { code: "6-66", title: 5, name: "Improper Display of License Plate", cls: "citation", jail: 0, fine: 250 },
+  { code: "6-63", title: 5, name: "Driving Without Due Regard", cls: "citation", jail: 0, fine: 400 },
+  { code: "6-64", title: 5, name: "Operating Unsafe Vehicle", cls: "citation", jail: 0, fine: 500 },
+  { code: "6-65", title: 5, name: "Improper Display of License Plate", cls: "citation", jail: 0, fine: 250 },
   { code: "6-67", title: 5, name: "Illegal Window Tint", cls: "citation", jail: 0, fine: 250 },
   { code: "6-68", title: 5, name: "Illegal Vehicle Modifications", cls: "citation", jail: 0, fine: 500 },
   { code: "6-69", title: 5, name: "Driving on a Sidewalk", cls: "citation", jail: 0, fine: 400 },
@@ -185,15 +194,25 @@ const CHARGES = [
   { code: "6-84", title: 5, name: "Unsafe Passing of a School Bus", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "6-85", title: 5, name: "Failure to Stop at a Railroad Crossing (Commercial Vehicle)", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "6-86", title: 5, name: "Driving Without Required Safety Equipment", cls: "citation", jail: 0, fine: 400 },
-  { code: "6-88", title: 5, name: "Improper Towing of a Vehicle", cls: "citation", jail: 0, fine: 500 },
-  { code: "6-89", title: 5, name: "Operating a Vehicle with an Obstructed View", cls: "citation", jail: 0, fine: 350 },
-  { code: "6-90", title: 5, name: "Improper Load Securement", cls: "citation", jail: 0, fine: 500 },
+  { code: "6-87", title: 5, name: "Improper Towing of a Vehicle", cls: "citation", jail: 0, fine: 500 },
+  { code: "6-88", title: 5, name: "Operating a Vehicle with an Obstructed View", cls: "citation", jail: 0, fine: 350 },
+  { code: "6-89", title: 5, name: "Improper Load Securement", cls: "citation", jail: 0, fine: 500 },
+  { code: "6-90", title: 5, name: "Failure to Abide by Curfew", cls: "citation", jail: 0, fine: 250 },
+  { code: "6-91", title: 5, name: "Vehicular Assault", cls: "citation", jail: 60, fine: 2000 },
+  { code: "6-92", title: 5, name: "At Fault at an Injury", cls: "citation", jail: 60, fine: 1500 },
+  { code: "6-93", title: 5, name: "Causing a Crash", cls: "citation", jail: 30, fine: 800 },
+  { code: "6-94", title: 5, name: "Causing Crash with Death", cls: "citation", jail: 120, fine: 1500 },
+  { code: "6-95", title: 5, name: "Hands Free Violation", cls: "citation", jail: 0, fine: 400 },
+  { code: "6-96", title: 5, name: "Curb Hopping", cls: "citation", jail: 0, fine: 500 },
+  { code: "6-97", title: 5, name: "Failure to Properly Attach Front Plate", cls: "citation", jail: 0, fine: 400 },
+  { code: "6-98", title: 5, name: "Failure to Safely Operate Self Driven Vehicle", cls: "citation", jail: 0, fine: 500 },
+  { code: "6-99", title: 5, name: "Improper Usage of Warning Lights", cls: "citation", jail: 0, fine: 100 },
 
-  // Title 7
+  // Title 7: Control of a Deadly Weapon and Equipment
   { code: "7-01", title: 6, name: "Possession of an Illegal Weapon", cls: "misdemeanor", jail: 60, fine: 1000 },
   { code: "7-02", title: 6, name: "Brandishing a Firearm", cls: "misdemeanor", jail: 60, fine: 1000 },
-  { code: "7-03", title: 6, name: "Illegal Discharge of a Firearm", cls: "felony", jail: 90, fine: 0 },
-  { code: "7-04", title: 6, name: "Unlicensed Possession of a Firearm", cls: "felony", jail: 90, fine: 0 },
+  { code: "7-03", title: 6, name: "Illegal Discharge of a Firearm", cls: "felony", jail: 90, fine: 500 },
+  { code: "7-04", title: 6, name: "Unlicensed Possession of a Firearm", cls: "felony", jail: 90, fine: 500 },
   { code: "7-05", title: 6, name: "Possession of a Stolen Weapon", cls: "felony", jail: 90, fine: 0 },
   { code: "7-06", title: 6, name: "Unlawful Distribution of a Firearm", cls: "felony", jail: 90, fine: 0 },
   { code: "7-07", title: 6, name: "Possession of a Firearm by a Convicted Felon", cls: "felony", jail: 120, fine: 5000 },
@@ -205,4 +224,24 @@ const CHARGES = [
   { code: "7-13", title: 6, name: "Unlawful Sale of a Firearm", cls: "felony", jail: 120, fine: 5000 },
   { code: "7-14", title: 6, name: "Negligent Storage of a Firearm", cls: "misdemeanor", jail: 30, fine: 1000 },
   { code: "7-15", title: 6, name: "Reckless Handling of a Firearm", cls: "misdemeanor", jail: 60, fine: 1500 },
+  { code: "7-16", title: 6, name: "Possession of a Firearm in a Restricted Area", cls: "misdemeanor", jail: 60, fine: 1000 },
+
+  // Title 8: Crimes Against Nature
+  { code: "8-01", title: 7, name: "Unlawfully Injuring Wildlife", cls: "misdemeanor", jail: 0, fine: 1000 },
+  { code: "8-02", title: 7, name: "Unlawful Sale of Wildlife", cls: "misdemeanor", jail: 90, fine: 2000 },
+  { code: "8-03", title: 7, name: "Unlawfully Harvesting Natural Resources", cls: "misdemeanor", jail: 30, fine: 600 },
+  { code: "8-04", title: 7, name: "Unlawful Captivity of Wildlife", cls: "misdemeanor", jail: 30, fine: 900 },
+  { code: "8-05", title: 7, name: "Disruption of Wildlife", cls: "citation", jail: 0, fine: 500 },
+  { code: "8-06", title: 7, name: "Camping on a Non-designated Campground", cls: "citation", jail: 0, fine: 150 },
+  { code: "8-07", title: 7, name: "In Park After Hours", cls: "citation", jail: 0, fine: 150 },
+  { code: "8-08", title: 7, name: "Trespassing on Rail Road Property", cls: "misdemeanor", jail: 30, fine: 800 },
+  { code: "8-09", title: 7, name: "Illegally Harvesting Game (per animal)", cls: "misdemeanor", jail: 60, fine: 2000 },
+  { code: "8-10", title: 7, name: "Possession of Illegally Harvested Game (per animal)", cls: "misdemeanor", jail: 30, fine: 800 },
+  { code: "8-11", title: 7, name: "Destroying Wildlife By Means Of Arson", cls: "felony", jail: 180, fine: 15000 },
+  { code: "8-12", title: 7, name: "Illegal Off-Roading", cls: "citation", jail: 0, fine: 250 },
+  { code: "8-13", title: 7, name: "Trespassing on a National Park", cls: "misdemeanor", jail: 0, fine: 150 },
+  { code: "8-14", title: 7, name: "Camping Without a Permit", cls: "eviction", jail: 0, fine: 0 },
+  { code: "8-15", title: 7, name: "Discharge of Firearm Within a National Park", cls: "felony", jail: 100, fine: 8000 },
+  { code: "8-16", title: 7, name: "Littering Within a National Park", cls: "citation", jail: 0, fine: 150 },
+  { code: "8-17", title: 7, name: "Entering a Restricted Area of a National Park", cls: "misdemeanor", jail: 90, fine: 800 },
 ];

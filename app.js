@@ -32,6 +32,13 @@ function normalize(str) {
 }
 
 
+// strips everything but digits — lets "(1)11", "1-11", and "111" all
+// resolve to the same thing for matching a charge's code number
+function digitsOnly(str) {
+  return str.replace(/[^0-9]/g, "");
+}
+
+
 /*
 Turns:
 
@@ -75,16 +82,7 @@ function penaltyLine(c) {
 
 
 function formatSeconds(total) {
-  if (total <= 0) {
-    return "0s";
-  }
-
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-
-  return m
-    ? `${m}m ${s}s`
-    : `${s}s`;
+  return `${Math.max(total, 0)}s`;
 }
 
 
@@ -133,18 +131,33 @@ function highlight(text, query) {
 }
 
 
-function matchScore(charge, q) {
+function matchScore(charge, q, qDigits) {
   const code = normalize(charge.code);
   const name = normalize(charge.name);
 
-  if (code === q) return 100;
-  if (code.startsWith(q)) return 90;
-  if (name.startsWith(q)) return 80;
-  if (name.includes(" " + q)) return 60;
-  if (name.includes(q)) return 50;
-  if (code.includes(q)) return 40;
+  let score = 0;
 
-  return 0;
+  if (code === q) score = Math.max(score, 100);
+  else if (code.startsWith(q)) score = Math.max(score, 90);
+
+  if (name.startsWith(q)) score = Math.max(score, 80);
+  else if (name.includes(" " + q)) score = Math.max(score, 60);
+  else if (name.includes(q)) score = Math.max(score, 50);
+
+  if (code.includes(q)) score = Math.max(score, 40);
+
+  // code-number search: "(1)11", "1-11", and "111" should all find 1-11,
+  // regardless of the punctuation the person actually typed
+  if (qDigits) {
+
+    const codeDigits = digitsOnly(charge.code);
+
+    if (codeDigits === qDigits) score = Math.max(score, 100);
+    else if (codeDigits.startsWith(qDigits)) score = Math.max(score, 92);
+
+  }
+
+  return score;
 }
 
 
@@ -165,6 +178,7 @@ const ALL_SORTED = [...CHARGES].sort((a, b) => {
 
 function search(query) {
   const q = normalize(query);
+  const qDigits = digitsOnly(query);
 
   if (!q) {
     return ALL_SORTED;
@@ -173,7 +187,7 @@ function search(query) {
   return CHARGES
     .map(c => ({
       c,
-      score: matchScore(c, q)
+      score: matchScore(c, q, qDigits)
     }))
     .filter(x => x.score > 0)
     .sort((a, b) => b.score - a.score)
